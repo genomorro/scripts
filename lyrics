@@ -1,0 +1,46 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+help() {
+    echo "Show lyrics on console"
+    echo "lyrics [OPCIONS]"
+    echo "Opcions:"
+    echo "-a <ARTIST>"
+    echo "-t <TITLE>"
+    echo "-d <DIR>"
+    exit 0
+}
+
+#TODO
+get_lyrics() {
+    echo -e "TODO"
+}
+
+# Begin Script
+ARTIST=`mocp -i | awk '/^Artist:/ { $1=""; print $0 }' | sed -e 's/^ *//g' -e 's/ *$//g'`
+TITLE=`mocp -i | awk '/^SongTitle:/ { $1=""; print $0 }' | sed -e 's/^ *//g' -e 's/ *$//g'`
+DIR="$HOME/.lyrics"
+if [[ $1 == "-h" ]]; then
+    help
+else
+    while getopts m:t:s:f: option
+    do
+	case "${option}" in
+            a) ARTIST=${OPTARG} ;;
+            t) TITLE=${OPTARG} ;;
+            d) DIR=${OPTARG} ;;
+	esac
+    done
+    FILE="$DIR/$ARTIST - $TITLE.txt"
+    if [[ -f "$FILE" ]]; then
+	exec $PAGER "$FILE"
+	exit 0	
+    else
+	#TODO download lyrics from Internet
+	echo -e "Lyrics not found\n"
+    fi
+    
+fi
+# End Script 
+

@@ -1,0 +1,25 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+[[ -z "$DISPLAY" ]] && exit 1
+
+if [[ -f "$HOME/.dmenurc" ]]; then
+    . "$HOME/.dmenurc"
+else
+    DMENU='dmenu -i'
+fi
+
+INPUT="$(echo -n | $DMENU -p "File search":)"
+
+[[ -z "$INPUT" ]] && exit 1
+
+RESULT="$(echo "$INPUT" | find $HOME /home/DATOS -iname "$INPUT" | $DMENU -p "Search for ($INPUT) result:")"
+
+[[ -z "$RESULT" ]] && exit 1
+
+if [[ -f "$HOME/.dwm/linopenrc" ]]; then
+    exec open -c $HOME/.dwm/linopenrc "$RESULT"
+else
+    exec open "$RESULT"
+fi

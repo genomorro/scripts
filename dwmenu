@@ -1,0 +1,28 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+[[ -z "$DISPLAY" ]] && exit 1
+
+if [[ -f "$HOME/.dmenurc" ]]; then
+    . "$HOME/.dmenurc"
+else
+    DMENU='dmenu -i'
+fi
+
+CHOICE=$(echo -e "1: Moc\n2: Finder\n3: Umount\n4: Change Wallpaper\n5: Toggle Touchpad\n8: Kill app\n9: Reboot\n0: Shutdown" | $DMENU | cut -d ':' -f 1)
+
+[[ -z "$CHOICE" ]] && exit 1
+
+case "$CHOICE" in
+    1) dmoc &                 ;;
+    2) dfinder &              ;;
+    3) dumount &              ;;
+    4) dwall &                ;;
+    5) toggle-touchpad &      ;;
+    
+    8) xkill &                ;;
+    9) sudo shutdown -r now & ;;
+    0) sudo shutdown -h now & ;;
+    *) exit 1                 ;;
+esac

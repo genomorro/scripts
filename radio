@@ -1,0 +1,70 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+help() {
+    echo "Script que sintoniza un streaming"
+    echo "radio [OPCIONES]"
+    echo "Opciones:"
+    echo "-m <MODE>  Opciones: silent  - Graba todo el tiempo"
+    echo "                     capture (default) - Comienza la grabación al teclear C"
+    echo "                               y termina presionando C nuevamente. OJO:"
+    echo "                               ¡PRESIONAR NUEVAMENTE REESCRIBIRÁ EL ARCHIVO!"
+    echo "-t <TIME>  Tiempo de duración de la ejecución. Dado en segundos"
+    echo "           Valores clave: 1[m]=6[s] 1[h]=3600[s]"
+    echo "           Convertir HH:MM:SS a seg en Bash:"
+    echo '           echo $(($(date -ud "HH:MM:SS" +%s)%86400))'
+    echo "-f <FILE>  Archivo donde se guardará la grabación. El formato será:"
+    echo "           <FILE>-YYYYMMDD-HHMMSS"
+    echo "-s <URL>   Estación a sintonizar, default: http://74.86.83.83:8130 (Opus IMER 94.5)"
+    exit 0
+}
+set_mode() {
+    if [[ $MODE = "silent" ]]
+    then
+   OPTIONS="-dumpstream"
+    elif [[ $MODE = "capture" || -z $MODE ]]
+    then
+   OPTIONS="-capture"
+    else
+   help
+    fi
+}
+# TODO: Aceptar valores HH:MM:SS
+set_time() {
+    if [[ -z $TIME ]]
+    then
+   OPTIONS="$OPTIONS"
+    elif [[ $TIME -gt 0 ]]
+    then
+       OPTIONS="$OPTIONS -endpos $TIME"
+    else
+   help
+    fi
+}
+# Begin Script
+PLAYER=mplayer2
+STATION=http://74.86.83.83:8130
+FILE=Opus
+if [[ $1 == "-h" ]]; then
+    help
+else
+    while getopts m:t:s:f: option
+    do
+   case "${option}"
+            in
+            m) MODE=${OPTARG} ;;
+            t) TIME=${OPTARG} ;;
+            s) STATION=${OPTARG} ;;
+       f) FILE=${OPTARG} ;;
+   esac
+    done
+    set_mode
+    set_time
+    FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
+    DEFAULT_OPTS="-dumpfile ${FILE_NAME} $STATION"
+    # echo $PLAYER $OPTIONS $DEFAULT_OPTS #Ver que comando se ejecuta
+    exec $PLAYER $OPTIONS $DEFAULT_OPTS
+    exit 0
+fi
+# End Script 

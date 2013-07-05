@@ -1,0 +1,18 @@
+#!/bin/sh
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+[[ -z "$DISPLAY" ]] && exit 1
+
+if [[ -f "$HOME/.dmenurc" ]]; then
+    . "$HOME/.dmenurc"
+else
+    DMENU='dmenu -i'
+fi
+
+WALLPAPER_DIR="$HOME/.dwm/backgrounds/"
+WALLPAPER=$(ls $WALLPAPER_DIR | $DMENU -p "Choose a Wallpaper:")
+
+[[ -z "$WALLPAPER" ]] && exit 1
+
+display -backdrop -geometry $(xrandr  | grep \* | cut -d' ' -f4) -window root $WALLPAPER_DIR/$WALLPAPER

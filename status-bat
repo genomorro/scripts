@@ -1,0 +1,16 @@
+#!/bin/bash
+
+WORK_DIR="/sys/class/power_supply"
+CAPACITY=`/bin/cat $WORK_DIR/BAT0/capacity`
+STATUS=`/bin/cat $WORK_DIR/BAT0/status`
+ACAD=`/bin/cat $WORK_DIR/AC0/online`
+CURRENT=`/bin/cat $WORK_DIR/BAT0/energy_now`
+FULL=`/bin/cat $WORK_DIR/BAT0/energy_full`
+STATE=$(( $CURRENT * 100 / $FULL))
+
+if [ $STATE -lt 100 ]
+then
+    echo -n ":: $STATE%"
+else
+    echo -n ":: =$STATE%"
+fi

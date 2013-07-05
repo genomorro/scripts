@@ -1,0 +1,76 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+[[ -z "$DISPLAY" ]] && exit 1
+
+if [[ -f "$HOME/.dmenurc" ]]; then
+    . "$HOME/.dmenurc"
+else
+    DMENU='dmenu -i'
+fi
+
+mocp_play() {
+    STATUS="$(mocp -i | awk '/^State/{print $2}')"
+    case "$STATUS" in
+	STOP)
+	    mocp -p ;;
+	PAUSE)
+	    mocp -G ;;
+	PLAY)
+	    mocp -G ;;
+	"")
+	    mocp -S
+	    mocp -p ;;
+    esac
+}
+
+mocp_append() {
+    PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Add this song to the playlist:")"
+    [[ -z $PLAY ]] && exit 1
+    STATUS="$(mocp -i | awk '/^State/{print $2}')"
+    case "$STATUS" in
+	STOP)
+	    mocp -a "$PLAY"
+	    mocp -p ;;
+	PAUSE)
+	    mocp -a "$PLAY"
+	    mocp -G ;;
+	PLAY)
+	    mocp -a "$PLAY" ;;
+	"")
+	    mocp -S
+	    mocp -a "$PLAY"
+	    mocp -p ;;
+    esac
+}
+
+ACTION=$(echo -e "1: Play|Pause\n2: Previous Song\n3: Next Song\n4:Open Moc\n5: Add to Playlist\n6: Toggle Repeat\n7: Toggle Shuffle\n8: Toggle Next\n9: Show Lyrics\n0: Stop Server" | $DMENU | cut -d ':' -f 1)
+
+case "$ACTION" in
+    1) 
+	mocp_play ;;
+    2) 
+	mocp -r
+	dmoc ;;    
+    3) 
+	mocp -f
+	dmoc ;;
+    4) 
+	xterm -e mocp & ;;
+    5) 
+	mocp_append
+	dmoc ;;
+    6) 
+	mocp -t r ;;
+    7) 
+	mocp -t s ;;
+    8) 
+	mocp -t n ;;
+    9) 
+	xterm -e lyrics & ;;
+    0) 
+	mocp -x ;;
+    *)
+	exit 1 ;;
+esac

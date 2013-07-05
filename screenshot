@@ -1,0 +1,43 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+help() {
+    echo "Script que captura pantallas con ayuda de import (ImageMagick)"
+    echo "screenshot [OPCIONES]"
+    echo "Opciones:"
+    echo "-m <MODE>  Opciones: window  - Regresa un cursor para seleccionar una ventana"
+    echo "                     root    - Toma la imagen de toda la pantalla (default)"
+    echo "                     tty     - Toma la imagen del tty actual"
+    echo "-f <FILE>  Archivo donde se guardará la imagen. El formato será:"
+    echo "           <FILE>-YYYYMMDD-HHMMSS por default es: screenshot"
+    exit 0
+}
+# Begin Script
+DATE=$(date +%Y%m%d-%H%M%S)
+FILE=screenshot
+
+if [[ $1 == "-h" ]]; then
+    help
+else
+    while getopts m:f: option
+    do
+	case "${option}"
+            in
+            m) MODE=${OPTARG} ;;
+            f) FILE=${OPTARG} ;;
+	esac
+    done
+    FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`.jpg
+    case $MODE in
+	window)
+	    import $FILE_NAME ;;
+	root)
+	    import -window root $FILE_NAME ;;
+	tty) 
+	    fbgrab $FILE_NAME ;;
+	*)
+	    help ;;
+    esac
+    exit 0
+fi 

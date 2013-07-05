@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# dumnt: gives a list of mounted external drives for umounting.
+#
+# depends on dmenu.
+
+# Source generic dmenu
+if [ -f $HOME/dmenu/dmenurc ]; then
+  . $HOME/dmenu/dmenurc
+else
+  DMENU='dmenu -i'
+fi
+
+# Show options, get choice
+choice=$(mount | awk '$3 ~ /\/media\// || /\/mnt\// { print $1" :: "$3 }' | $DMENU -p "Drive to umount:")
+
+if [[ $choice ]]; then
+        sudo umount $choice
+fi
