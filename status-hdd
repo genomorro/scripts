@@ -1,5 +1,5 @@
 #!/bin/bash
-HDD=`df -h | awk '$6 ~ /\media\// || /\/mnt\// {print $6 " " $2 " " $3}'`
+HDD=`df -h | awk '$6 ~ /\/media\// || /\/mnt\// {print $6 " " $2 " " $3}'`
 if [ -n "$HDD" ]
     then
     echo -n :: $HDD
