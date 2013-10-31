@@ -23,7 +23,7 @@ help() {
     echo "Opciones:"
     echo "-d <DEVICE> Dispositivo origen, por default /dev/video0"
     echo "-r <MODE>   Opciones: 0 - No graba, vista miniatura de la cámara"
-    echo "                      1 - Presiona 's' para tomar una foto"
+    echo "                      1 - Toma una foto"
     echo "                      2 - 320x240"
     echo "                      3 - 640x480 (default)"
     echo "                      4 - 1280x720"
