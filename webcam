@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Copyright (C) 2013, Edgar Uriel Domínguez Espinoza
+
+# webcam-script is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or (at
+# your option) any later version.
+
+# webcam-script is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with webcam-script; if not, see <http://www.gnu.org/licenses/>
+# or write to the Free Software Foundation, Inc., 51 Franklin St, Fifth
+# Floor, Boston, MA 02110-1301 USA
+
+help() {
+    echo "Graba o toma una foto del WebCam"
+    echo "webcam [OPCIONES]"
+    echo "Opciones:"
+    echo "-d <DEVICE> Dispositivo origen, por default /dev/video0"
+    echo "-r <MODE>   Opciones: 0 - No graba, vista miniatura de la cámara"
+    echo "                      1 - Presiona 's' para tomar una foto"
+    echo "                      2 - 320x240"
+    echo "                      3 - 640x480 (default)"
+    echo "                      4 - 1280x720"
+    echo "-f <FILE>   Archivo donde se guardará la imagen. El formato será:"
+    echo "            <FILE>-YYYYMMDD-HHMMSS por default es: webcam"
+    exit 0
+}
+# Begin Script
+FILE=webcam
+MODE=3
+DEVICE=/dev/video0
+
+if [[ $1 == "-h" ]]; then
+    help
+else
+    while getopts d:r:f: option
+    do
+	case "${option}"
+            in
+	    d) DEVICE=${OPTARG} ;;
+            r) MODE=${OPTARG}   ;;
+            f) FILE=${OPTARG}   ;;
+	esac
+    done
+    FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
+    case $MODE in
+	0)
+	    mplayer -cache 128 -tv driver=v4l2:width=176:height=177 -vo xv tv:// -noborder -geometry "95%:93%" -ontop ;;
+	1) 
+	    ffmpeg -y -r 1 -t 1 -f v4l2 -vframes 1 -s sxga -i $DEVICE $FILE_NAME.jpeg ;;
+	2)
+	    ffmpeg -f v4l2 -s 320x240 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	3)
+	    ffmpeg -f v4l2 -s 640x480 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	4) 
+	    ffmpeg -f v4l2 -s 1280x720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	*)
+	    help ;;
+    esac
+    exit 0
+fi 
