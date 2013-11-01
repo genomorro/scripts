@@ -18,7 +18,7 @@
 # Floor, Boston, MA 02110-1301 USA
 
 help() {
-    echo "Script que"
+    echo "Script que realiza un screencast"
     echo "screencast [OPCIONES]"
     echo "Opciones:"
     echo "-f <FILE>    Archivo donde se guardará la imagen. El formato será:"
