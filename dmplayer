@@ -45,7 +45,7 @@ mplayer_append() {
     fi
 }
 
-ACTION=$(echo -e "1: Play|Pause \n2: Previous \n3: Next \n4:Add to Playlist \n5: Play DVD \n6: Play DVDNav \n7: Repeat On \n8: Repeat Off \n0: Stop" | $DMENU | cut -d ':' -f 1)
+ACTION=$(echo -e "1: Play|Pause \n2: Previous \n3: Next \n4:Add to Playlist \n5: Play DVD \n6: Play DVDNav \n7: Repeat On \n0: Stop" | $DMENU | cut -d ':' -f 1)
 
 case "$ACTION" in
     1)
@@ -65,8 +65,6 @@ case "$ACTION" in
 	exec $PLAYER dvdnav:// ;;
     7)
 	echo "loop 0" > $FIFO ;;
-    8)
-	echo "loop -1" > $FIFO ;;
     0)
 	echo "stop" > $FIFO
 	rm $FIFO ;;
