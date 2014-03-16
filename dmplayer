@@ -1,0 +1,69 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+[[ -z "$DISPLAY" ]] && exit 1
+
+if [[ -f "$HOME/.dmenurc" ]]; then
+    . "$HOME/.dmenurc"
+else
+    DMENU='dmenu -i'
+fi
+
+FIFO="$HOME/.mplayer/mplayer_fifo"
+PLAYER="mplayer -slave -input file=$FIFO"
+
+mplayer_play() {
+    if [ `ps -C mplayer -opid=` == null ]; then
+	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play this song:")"
+	[[ -z $PLAY ]] && exit 1
+	mkfifo $FIFO
+	exec $PLAYER "$PLAY"
+    else
+	if [[ -a "$FIFO" ]]; then
+	    echo "pause" > $FIFO
+	fi
+
+    fi
+    exit 0
+}
+
+mplayer_append() {
+	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play this song:")"
+    [[ -z $PLAY ]] && exit 1
+    if [ `ps -C mplayer -opid=` != null ]; then
+	if [[ -a "$FIFO" ]]; then
+	    echo -n load
+	    echo "loadfile '$PLAY' 1" > $FIFO
+	fi
+    else
+	echo -n play
+	mkfifo $FIFO
+	exec $PLAYER "$PLAY"
+    fi
+}
+
+ACTION=$(echo -e "1: Play|Pause \n2: Previous \n3: Next \n4:Add to Playlist \n5: Play DVD \n6: Play DVDNav \n0: Stop" | $DMENU | cut -d ':' -f 1)
+
+case "$ACTION" in
+    1)
+	mplayer_play ;;
+    2)
+	echo "pt_step -1" > $FIFO
+	dmplayer ;;
+    3)
+	echo "pt_step 1" > $FIFO
+	dmplayer ;;
+    4)
+	mplayer_append 
+	dmplayer ;;
+    5)
+	exec $PLAYER dvd:// ;;
+    6)
+	exec $PLAYER dvdnav:// ;;
+    0)
+	echo "stop" > $FIFO
+	rm $FIFO ;;
+    *)
+	exit 1 ;;
+esac
