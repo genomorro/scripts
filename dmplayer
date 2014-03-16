@@ -11,7 +11,8 @@ else
 fi
 
 FIFO="$HOME/.mplayer/mplayer_fifo"
-PLAYER="mplayer -slave -input file=$FIFO"
+# TODO: add -idle option as replacement of if statements
+PLAYER="mplayer -quiet -loop -1 -vf screenshot -slave -input file=$FIFO"
 
 mplayer_play() {
     if [ `ps -C mplayer -opid=` != null ]; then
@@ -44,7 +45,7 @@ mplayer_append() {
     fi
 }
 
-ACTION=$(echo -e "1: Play|Pause \n2: Previous \n3: Next \n4:Add to Playlist \n5: Play DVD \n6: Play DVDNav \n0: Stop" | $DMENU | cut -d ':' -f 1)
+ACTION=$(echo -e "1: Play|Pause \n2: Previous \n3: Next \n4:Add to Playlist \n5: Play DVD \n6: Play DVDNav \n7: Toggle Repeat Playlist \n0: Stop" | $DMENU | cut -d ':' -f 1)
 
 case "$ACTION" in
     1)
@@ -62,6 +63,8 @@ case "$ACTION" in
 	exec $PLAYER dvd:// ;;
     6)
 	exec $PLAYER dvdnav:// ;;
+    7)
+	echo "loop 0" > $FIFO ;;
     0)
 	echo "stop" > $FIFO
 	rm $FIFO ;;
