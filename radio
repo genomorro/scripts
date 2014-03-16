@@ -43,7 +43,7 @@ set_time() {
     fi
 }
 # Begin Script
-PLAYER=mplayer2
+PLAYER=mplayer
 STATION=http://74.86.83.83:8130
 FILE=Opus
 if [[ $1 == "-h" ]]; then

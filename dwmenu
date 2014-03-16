@@ -10,7 +10,7 @@ else
     DMENU='dmenu -i'
 fi
 
-CHOICE=$(echo -e "1: Finder\n2: Umount\n3: Change Wallpaper\n4: Toggle Touchpad\n8: Kill app\n9: Reboot\n0: Shutdown" | $DMENU | cut -d ':' -f 1)
+CHOICE=$(echo -e "1: Finder\n2: Umount\n3: Change Wallpaper\n4: Toggle Touchpad\n5: Toggle Display\n6: Mplayer\n7: Reload Xresources\n8: Kill app\n9: Reboot\n0: Shutdown" | $DMENU | cut -d ':' -f 1)
 
 [[ -z "$CHOICE" ]] && exit 1
 
@@ -19,7 +19,9 @@ case "$CHOICE" in
     2) dumount &              ;;
     3) dwall &                ;;
     4) toggle-touchpad &      ;;
-    
+    5) toggle-display &       ;;
+    6) dmplayer &             ;;
+    7) xrdb -merge /etc/X11/Xresources ;;
     8) xkill &                ;;
     9) sudo shutdown -r now & ;;
     0) sudo shutdown -h now & ;;

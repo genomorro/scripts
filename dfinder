@@ -14,7 +14,7 @@ INPUT="$(echo -n | $DMENU -p "File search":)"
 
 [[ -z "$INPUT" ]] && exit 1
 
-RESULT="$(echo "$INPUT" | find $HOME /home/DATOS -iname "$INPUT" | $DMENU -p "Search for ($INPUT) result:")"
+RESULT="$(echo "$INPUT" | find $HOME /home/DATOS -iname "*$INPUT*" | $DMENU -p "Search for ($INPUT) result:")"
 
 [[ -z "$RESULT" ]] && exit 1
 
