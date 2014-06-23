@@ -51,7 +51,7 @@ else
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     case $MODE in
 	0)
-	    mplayer -cache 128 -tv driver=v4l2:width=176:height=177 -vo xv tv:// -noborder -geometry "95%:93%" -ontop ;;
+	    ffplay -s 176x177 -f v4l2 $DEVICE ;;
 	1) 
 	    ffmpeg -y -r 1 -t 1 -f v4l2 -vframes 1 -s sxga -i $DEVICE $FILE_NAME.jpeg ;;
 	2)
