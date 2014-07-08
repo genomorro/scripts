@@ -2,6 +2,9 @@
 # Edgar Uriel Domínguez Espinoza
 # edgar_uriel84@NOSPAM.gmx.com
 
+# This is a small script is useful with MoC and clyrics (https://github.com/trizen/clyrics)
+# is needed for get lyrics from Internet. In fact clyrics could be enough for you
+
 help() {
     echo "Show lyrics on console"
     echo "lyrics [OPCIONS]"
@@ -12,11 +15,6 @@ help() {
     exit 0
 }
 
-#TODO
-get_lyrics() {
-    echo -e "TODO"
-}
-
 # Begin Script
 ARTIST=`mocp -i | awk '/^Artist:/ { $1=""; print $0 }' | sed -e 's/^ *//g' -e 's/ *$//g'`
 TITLE=`mocp -i | awk '/^SongTitle:/ { $1=""; print $0 }' | sed -e 's/^ *//g' -e 's/ *$//g'`
@@ -24,7 +22,7 @@ DIR="$HOME/.lyrics"
 if [[ $1 == "-h" ]]; then
     help
 else
-    while getopts m:t:s:f: option
+    while getopts a:t:d: option
     do
 	case "${option}" in
             a) ARTIST=${OPTARG} ;;
@@ -35,12 +33,9 @@ else
     FILE="$DIR/$ARTIST - $TITLE.txt"
     if [[ -f "$FILE" ]]; then
 	exec $PAGER "$FILE"
-	exit 0	
     else
-	#TODO download lyrics from Internet
-	echo -e "Lyrics not found\n"
+	exec clyrics "$ARTIST" "$TITLE" | "$PAGER"
     fi
-    
+    exit 0
 fi
 # End Script 
-
