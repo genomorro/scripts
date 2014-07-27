@@ -4,8 +4,8 @@
 
 [[ -z "$DISPLAY" ]] && exit 1
 
-if [[ -f "$HOME/.dmenurc" ]]; then
-    . "$HOME/.dmenurc"
+if [[ -f "$HOME/.dwm/dmenurc" ]]; then
+    . "$HOME/.dwm/dmenurc"
 else
     DMENU='dmenu -i'
 fi
@@ -57,7 +57,7 @@ case "$ACTION" in
 	mocp -f
 	dmoc ;;
     4) 
-	xterm -e mocp & ;;
+	st -e mocp & ;;
     5) 
 	mocp_append
 	dmoc ;;
@@ -68,7 +68,7 @@ case "$ACTION" in
     8) 
 	mocp -t n ;;
     9) 
-	xterm -e lyrics & ;;
+	st -e lyrics & ;;
     0) 
 	mocp -x ;;
     *)
