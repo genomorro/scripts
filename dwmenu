@@ -4,8 +4,8 @@
 
 [[ -z "$DISPLAY" ]] && exit 1
 
-if [[ -f "$HOME/.dmenurc" ]]; then
-    . "$HOME/.dmenurc"
+if [[ -f "$HOME/.dwm/dmenurc" ]]; then
+    . "$HOME/.dwm/dmenurc"
 else
     DMENU='dmenu -i'
 fi

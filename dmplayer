@@ -4,8 +4,8 @@
 
 [[ -z "$DISPLAY" ]] && exit 1
 
-if [[ -f "$HOME/.dmenurc" ]]; then
-    . "$HOME/.dmenurc"
+if [[ -f "$HOME/.dwm/dmenurc" ]]; then
+    . "$HOME/.dwm/dmenurc"
 else
     DMENU='dmenu -i'
 fi
@@ -21,7 +21,7 @@ mplayer_play() {
 	    echo "pause" > $FIFO
 	fi
     else
-	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.asx" -o -iname "*.rm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play: ")"
+	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.asx" -o -iname "*.rm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play: ")"
 	[[ -z $PLAY ]] && exit 1
 	mkfifo $FIFO
 	exec $PLAYER "$PLAY"
@@ -31,7 +31,7 @@ mplayer_play() {
 }
 
 mplayer_append() {
-	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.asx" -o -iname "*.rm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play: ")"
+	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.asx" -o -iname "*.rm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play: ")"
     [[ -z $PLAY ]] && exit 1
     if [ `ps -C mplayer -opid=` != null ]; then
 	if [[ -a "$FIFO" ]]; then

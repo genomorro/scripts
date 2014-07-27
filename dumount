@@ -5,8 +5,8 @@
 # depends on dmenu.
 
 # Source generic dmenu
-if [ -f $HOME/dmenu/dmenurc ]; then
-  . $HOME/dmenu/dmenurc
+if [ -f $HOME/.dwm/dmenurc ]; then
+  . $HOME/.dwm/dmenurc
 else
   DMENU='dmenu -i'
 fi
