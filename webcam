@@ -51,15 +51,15 @@ else
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     case $MODE in
 	0)
-	    ffplay -s 176x177 -f v4l2 $DEVICE ;;
+	    avplay -f video4linux2 -video_size qcif $DEVICE ;;
 	1) 
-	    ffmpeg -y -r 1 -t 1 -f v4l2 -vframes 1 -s sxga -i $DEVICE $FILE_NAME.jpeg ;;
+	    avconv -y -r 1 -t 1 -f video4linux2 -vframes 1 -video_size hd720 -i $DEVICE $FILE_NAME.jpeg ;;
 	2)
-	    ffmpeg -f v4l2 -s 320x240 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    avconv -f video4linux2 -video_size qvga -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	3)
-	    ffmpeg -f v4l2 -s 640x480 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    avconv -f video4linux2 -video_size vga -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	4) 
-	    ffmpeg -f v4l2 -s 1280x720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    avconv -f video4linux2 -video_size hd720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	*)
 	    help ;;
     esac

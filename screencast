@@ -42,6 +42,6 @@ else
     done
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     [[ -z "$DISPLAY" ]] && exit 1
-    ffmpeg -f x11grab -s $RESOLUTION -i $DISPLAY -f alsa -ac 2 -i default -async 1 -acodec flac -vcodec libx264 -preset ultrafast -crf 0 -threads 0 $FILE_NAME.mkv
+    avconv -f x11grab -s $RESOLUTION -i $DISPLAY -f alsa -ac 2 -i default -async 1 -acodec flac -vcodec libx264 -preset ultrafast -crf 0 -threads 0 $FILE_NAME.mkv
     exit 0
 fi 
