@@ -2,18 +2,18 @@
 
 # Copyright (C) 2013, Edgar Uriel Domínguez Espinoza
 
-# webcam-script is free software; you can redistribute it and/or modify
+# webcam-video_sizecript is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or (at
 # your option) any later version.
 
-# webcam-script is distributed in the hope that it will be useful, but
+# webcam-video_sizecript is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with webcam-script; if not, see <http://www.gnu.org/licenses/>
+# along with webcam-video_sizecript; if not, see <http://www.gnu.org/licenses/>
 # or write to the Free Software Foundation, Inc., 51 Franklin St, Fifth
 # Floor, Boston, MA 02110-1301 USA
 
@@ -51,15 +51,15 @@ else
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     case $MODE in
 	0)
-	    avplay -f video4linux2 -video_size qcif $DEVICE ;;
+	    ffplay -video_size 176x177 -f v4l2 $DEVICE ;;
 	1) 
-	    avconv -y -r 1 -t 1 -f video4linux2 -vframes 1 -video_size hd720 -i $DEVICE $FILE_NAME.jpeg ;;
+	    ffmpeg -y -r 1 -t 1 -f v4l2 -vframes 1 -video_size sxga -i $DEVICE $FILE_NAME.jpeg ;;
 	2)
-	    avconv -f video4linux2 -video_size qvga -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    ffmpeg -f v4l2 -video_size 320x240 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	3)
-	    avconv -f video4linux2 -video_size vga -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    ffmpeg -f v4l2 -video_size 640x480 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	4) 
-	    avconv -f video4linux2 -video_size hd720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    ffmpeg -f v4l2 -video_size 1280x720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	*)
 	    help ;;
     esac

@@ -22,7 +22,7 @@ help() {
     echo "screencast [OPCIONES]"
     echo "Opciones:"
     echo "-f <FILE>    Archivo donde se guardará la imagen. El formato será:"
-    echo "             <FILE>-YYYYMMDD-HHMMSS por default es: webcam"
+    echo "             <FILE>-YYYYMMDD-HHMMSS por default es: screencast"
     exit 0
 }
 # Begin Script
@@ -42,6 +42,6 @@ else
     done
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     [[ -z "$DISPLAY" ]] && exit 1
-    avconv -f x11grab -s $RESOLUTION -i $DISPLAY -f alsa -ac 2 -i default -async 1 -acodec flac -vcodec libx264 -preset ultrafast -crf 0 -threads 0 $FILE_NAME.mkv
+    ffmpeg -f x11grab -video_size $RESOLUTION -i $DISPLAY -f alsa -ac 2 -i default -async 1 -acodec flac -vcodec libx264 -preset ultrafast -crf 0 -threads 0 $FILE_NAME.mkv
     exit 0
 fi 
