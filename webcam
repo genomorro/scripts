@@ -22,18 +22,19 @@ help() {
     echo "webcam [OPCIONES]"
     echo "Opciones:"
     echo "-d <DEVICE> Dispositivo origen, por default /dev/video0"
-    echo "-r <MODE>   Opciones: 0 - No graba, vista miniatura de la cámara"
-    echo "                      1 - Toma una foto"
-    echo "                      2 - 320x240"
-    echo "                      3 - 640x480 (default)"
-    echo "                      4 - 1280x720"
+    echo "-r <MODE>   Opciones: 0 - No graba video, solo audío"
+    echo "                      1 - No graba, vista miniatura de la cámara"
+    echo "                      2 - Toma una foto"
+    echo "                      3 - 320x240"
+    echo "                      4 - 640x480 (default)"
+    echo "                      5 - 1280x720"
     echo "-f <FILE>   Archivo donde se guardará la imagen. El formato será:"
     echo "            <FILE>-YYYYMMDD-HHMMSS por default es: webcam"
     exit 0
 }
 # Begin Script
 FILE=webcam
-MODE=3
+MODE=4
 DEVICE=/dev/video0
 
 if [[ $1 == "-h" ]]; then
@@ -51,14 +52,16 @@ else
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     case $MODE in
 	0)
+	    ffmpeg -f alsa -ac 2 -i default -acodec flac $FILE_NAME.flac ;;
+	1)
 	    ffplay -video_size 176x177 -f v4l2 $DEVICE ;;
-	1) 
+	2) 
 	    ffmpeg -y -r 1 -t 1 -f v4l2 -vframes 1 -video_size sxga -i $DEVICE $FILE_NAME.jpeg ;;
-	2)
-	    ffmpeg -f v4l2 -video_size 320x240 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	3)
+	    ffmpeg -f v4l2 -video_size 320x240 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	4)
 	    ffmpeg -f v4l2 -video_size 640x480 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
-	4) 
+	5) 
 	    ffmpeg -f v4l2 -video_size 1280x720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	*)
 	    help ;;
