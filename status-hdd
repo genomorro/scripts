@@ -1,7 +1,10 @@
 #!/bin/bash
 HDD=`df -h | awk '$6 ~ /\/media\// || /\/mnt\// {print $6 " " $2 " " $3}'`
-if [ -n "$HDD" ]
-    then
-    echo -n :: $HDD
+if [ -n "$HDD" ]; then
+    if [[ $1 == "-c" ]]; then
+	echo -n $HDD
+    else
+	echo -n " :: "$HDD
+    fi
 fi
 

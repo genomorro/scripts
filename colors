@@ -10,7 +10,7 @@
 
 T='gYw'   # The test text
 
-echo -e "\n                 40m     41m     42m     43m\
+echo -e "\n                 40m     41m     42m     43m     \
 44m     45m     46m     47m";
 
 for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m' \
@@ -27,25 +27,15 @@ echo
 
 #script 2
 
-COLS="$(xrdb -query| grep -Ei [.*]color[01-9] | sort -n -tr -k2  | tr -d [*[:blank:]])"
-
-for i in {0..7}; do echo -en "\e[0;3${i}m$(echo -e "$COLS" | sed -n $(($i+1))'p' | cut -d ':' -f 1)\e[0m\t"; done; echo
-for i in {0..7}; do echo -en "\e[0;3${i}m$(echo -e "$COLS" | sed -n $(($i+1))'p' | cut -d ':' -f 2)\e[0m\t\t"; done; echo
-for i in {0..7}; do echo -en "\e[0;3${i}m▉▉▉▉▉▉▉\t\t"; done; echo
-for i in {0..7}; do echo -en "\e[0;9${i}m$(echo -e "$COLS" | sed -n $(($i+9))'p' | cut -d ':' -f 1)\e[0m\t"; done; echo
-for i in {0..7}; do echo -en "\e[0;9${i}m$(echo -e "$COLS" | sed -n $(($i+9))'p' | cut -d ':' -f 2)\e[0m\t\t"; done; echo
-for i in {0..7}; do echo -en "\e[0;9${i}m▉▉▉▉▉▉▉\t\t"; done; echo -e "\033[0m"
-echo -en "foreground: ▉▉▉▉▉▉▉▉▉▉▉ \n"
-
 #script 3
 
 xdef="/etc/X11/Xresources"
 
 colors=( $( sed -re '/^!/d; /^$/d; /^#/d; s/(\*color)([0-9]):/\10\2:/g;' $xdef | grep 'color[01][0-9]:' | sort | sed  's/^.*: *//g' ) )
 
-echo -e "\e[1;37m 
+echo -e "\033[0m 
  Black    Red      Green    Yellow   Blue     Magenta   Cyan    White   
-──────────────────────────────────────────────────────────────────────\e[0m"
+ ──────────────────────────────────────────────────────────────────────\e[0m"
 for i in {0..7}; do echo -en "\e[$((30+$i))m ${colors[i]} \e[0m"; done
 echo
 for i in {8..15}; do echo -en "\e[1;$((22+$i))m ${colors[i]} \e[0m"; done
