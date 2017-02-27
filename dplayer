@@ -1,0 +1,75 @@
+#!/bin/bash
+# Edgar Uriel Domínguez Espinoza
+# edgar_uriel84@NOSPAM.gmx.com
+
+[[ -z "$DISPLAY" ]] && exit 1
+
+if [[ -f "$HOME/.dwm/dmenurc" ]]; then
+    . "$HOME/.dwm/dmenurc"
+else
+    DMENU='dmenu -i'
+fi
+
+FIFO="$HOME/.mpv/mpv_fifo"
+SOCKET="$HOME/.mpv/socket"
+PLAYER="mpv"
+SLAVE="$PLAYER --input-ipc-server=$SOCKET -input-file=$FIFO --idle --quiet"
+
+dplayer_play() {
+    # FIX: Warning
+    if [ `ps -C mpv -opid=` != null ]; then
+
+	if [[ -a "$FIFO" ]]; then
+	    echo "cycle pause" > $FIFO
+	fi
+    else
+	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.asx" -o -iname "*.rm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play: ")"
+	[[ -z $PLAY ]] && exit 1
+	mkfifo $FIFO
+	exec $SLAVE "$PLAY"
+    fi
+    exit 0
+}
+
+dplayer_append() {
+	PLAY="$(find $HOME /home/DATOS -type f \( -iname "*.mp3" -o -iname "*.ogg" -o -iname "*.avi" -o -iname "*.mp4" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.wmv" -o -iname "*.ogm" -o -iname "*.asx" -o -iname "*.rm" -o -iname "*.m3u" \) | $DMENU -l 10 -p "Play: ")"
+    [[ -z $PLAY ]] && exit 1
+    if [ `ps -C mpv -opid=` != null ]; then
+	if [[ -a "$FIFO" ]]; then
+	    echo -n load
+	    # FIX: PLAY spaces
+	    echo -e "loadfile" "$PLAY" "append" > $FIFO
+	fi
+    else
+	echo -n play
+	mkfifo $FIFO
+	exec $SLAVE "$PLAY"
+    fi
+}
+
+ACTION=$(echo -e "1: Play|Pause \n2: Previous \n3: Next \n4:Add to Playlist \n5: Play DVD \n6: Play Bluray \n7: Repeat On \n0: Stop" | $DMENU | cut -d ':' -f 1)
+
+case "$ACTION" in
+    1)
+	dplayer_play ;;
+    2)
+	echo "playlist-prev" > $FIFO
+	dplayer ;;
+    3)
+	echo "playlist-next" > $FIFO
+	dplayer ;;
+    4)
+	dplayer_append 
+	dplayer ;;
+    5)
+	exec $PLAYER dvd:// ;;
+    6)
+	exec $PLAYER bd:// ;;
+    7)
+	echo "cycle-values loop inf no" > $FIFO ;;
+    0)
+	echo "stop" > $FIFO
+	rm $FIFO ;;
+    *)
+	exit 1 ;;
+esac
