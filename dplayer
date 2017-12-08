@@ -10,7 +10,7 @@ else
     DMENU='dmenu -i'
 fi
 
-FIFO="$HOME/.mpv/mpv_fifo"
+FIFO="$HOME/.mpv/fifo"
 SOCKET="$HOME/.mpv/socket"
 PLAYER="mpv"
 SLAVE="$PLAYER --input-ipc-server=$SOCKET -input-file=$FIFO --idle --quiet"
@@ -38,7 +38,7 @@ dplayer_append() {
 	if [[ -a "$FIFO" ]]; then
 	    echo -n load
 	    # FIX: PLAY spaces
-	    echo -e "loadfile" "$PLAY" "append" > $FIFO
+	    echo -e "loadfile $PLAY append" #> $FIFO
 	fi
     else
 	echo -n play
