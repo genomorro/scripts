@@ -10,7 +10,7 @@ else
     DMENU='dmenu -i'
 fi
 
-CHOICE=$(echo -e "1: Tools\n2: Umount\n3: Change Wallpaper\n4:Restart dstatus\n5:MoC\n6:Toggle Touchpad\n7: Reload Xresources\n8: Kill app\n9: Reboot\n0: Shutdown" | $DMENU | cut -d ':' -f 1)
+CHOICE=$(echo -e "1: Tools\n2: Umount\n3: Change Wallpaper\n4:Restart dstatus\n5:MoC\n6:dplayer\n7:Toggle Touchpad\n8: Kill app\n9: Reboot\n0: Shutdown" | $DMENU | cut -d ':' -f 1)
 
 [[ -z "$CHOICE" ]] && exit 1
 
@@ -21,8 +21,8 @@ case "$CHOICE" in
     4) killall dstatus
        dstatus                ;;
     5) dmoc &                 ;;
-    6) toggle-touchpad        ;;
-    7) xrdb -merge /etc/X11/Xresources ;;
+    6) dplayer &              ;;
+    7) toggle-touchpad        ;;
     8) xkill &                ;;
     9) sudo shutdown -r now & ;;
     0) sudo shutdown -h now & ;;
