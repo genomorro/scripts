@@ -52,17 +52,17 @@ else
     FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
     case $MODE in
 	0)
-	    ffmpeg -f alsa -ac 2 -i default -acodec flac $FILE_NAME.flac ;;
+	    ffmpeg -f pulse -ac 2 -i default -acodec flac $FILE_NAME.flac ;;
 	1)
 	    ffplay -video_size 176x177 -f v4l2 $DEVICE ;;
 	2) 
 	    ffmpeg -y -r 1 -t 1 -f v4l2 -vframes 1 -video_size sxga -i $DEVICE $FILE_NAME.jpeg ;;
 	3)
-	    ffmpeg -f v4l2 -video_size 320x240 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    ffmpeg -f v4l2 -video_size 320x240 -i $DEVICE -f pulse -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	4)
-	    ffmpeg -f v4l2 -video_size 640x480 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    ffmpeg -f v4l2 -video_size 640x480 -i $DEVICE -f pulse -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	5) 
-	    ffmpeg -f v4l2 -video_size 1280x720 -i $DEVICE -f alsa -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
+	    ffmpeg -f v4l2 -video_size 1280x720 -i $DEVICE -f pulse -ac 2 -i default -acodec flac -vcodec libx264 $FILE_NAME.mkv ;;
 	*)
 	    help ;;
     esac
