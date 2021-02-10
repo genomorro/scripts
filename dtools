@@ -12,23 +12,31 @@ fi
 
 ## Functions
 # https://crunchbang.org/forums/viewtopic.php?pid=428517#p428517
-function reloadGTK(){
-    python2 - <<END
-import gtk
+# function reloadGTK2(){
+#     python2 - <<END
+# import gtk
 
-events=gtk.gdk.Event(gtk.gdk.CLIENT_EVENT)
-data=gtk.gdk.atom_intern("_GTK_READ_RCFILES", False)
-events.data_format=8
-events.send_event=True
-events.message_type=data
-events.send_clientmessage_toall()
+# events=gtk.gdk.Event(gtk.gdk.CLIENT_EVENT)
+# data=gtk.gdk.atom_intern("_GTK_READ_RCFILES", False)
+# events.data_format=8
+# events.send_event=True
+# events.message_type=data
+# events.send_clientmessage_toall()
 
-END
-}
+# END
+# }
+
+#https://askubuntu.com/questions/151513/reload-gtk-3-0-theme
+# function reloadGTK3() {
+#   theme=$(gsettings get org.gnome.desktop.interface gtk-theme)
+#   gsettings set org.gnome.desktop.interface gtk-theme ''
+#   sleep 1
+#   gsettings set org.gnome.desktop.interface gtk-theme $theme
+# }
 ## Functions
 
 
-CHOICE=$(echo -e "1: Screenshot\n2: Screenshot Window\n3: Take Picture\n4: Show Camera\n5: Reload Xresources\n6:Switch theme" | $DMENU | cut -d ':' -f 1)
+CHOICE=$(echo -e "1: Screenshot\n2: Screenshot Window\n3: Take Picture\n4: Show Camera\n5: Reload Xresources\n6:Switch theme\n7:NetworkManager\n8:Display menu" | $DMENU | cut -d ':' -f 1)
 
 [[ -z "$CHOICE" ]] && exit 1
 
@@ -38,10 +46,13 @@ case "$CHOICE" in
     3) webcam -r 2 ;;
     4) webcam -r 1 ;;
     5) xrdb -merge /etc/X11/Xresources ;;
-    6) sed -i -e 's/Light/Dark/g' -e t -e 's/Dark/Light/g' $HOME/.gtkrc-2.0
-       reloadGTK ;;
-    7) ;;
-    8) ;;
+    6) sed -i -e 's/NumixSolarizedLightBlue/Solarized-Dark-Blue/g' -e t -e 's/Solarized-Dark-Blue/NumixSolarizedLightBlue/g' $HOME/.gtkrc-2.0 ;
+       sed -i -e 's/NumixSolarizedLightBlue/Solarized-Dark-Blue/g' -e t -e 's/Solarized-Dark-Blue/NumixSolarizedLightBlue/g' $HOME/.config/gtk-3.0/settings.ini ;
+       # reloadGTK2 ;
+       # reloadGTK3
+       ;;
+    7) networkmanager_dmenu ;;
+    8) displaymenu ;;
     9) ;;
     0) ;;
     *) exit 1                 ;;
