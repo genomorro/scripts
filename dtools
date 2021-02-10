@@ -11,20 +11,6 @@ else
 fi
 
 ## Functions
-# https://crunchbang.org/forums/viewtopic.php?pid=428517#p428517
-# function reloadGTK2(){
-#     python2 - <<END
-# import gtk
-
-# events=gtk.gdk.Event(gtk.gdk.CLIENT_EVENT)
-# data=gtk.gdk.atom_intern("_GTK_READ_RCFILES", False)
-# events.data_format=8
-# events.send_event=True
-# events.message_type=data
-# events.send_clientmessage_toall()
-
-# END
-# }
 
 #https://askubuntu.com/questions/151513/reload-gtk-3-0-theme
 # function reloadGTK3() {
@@ -48,7 +34,6 @@ case "$CHOICE" in
     5) xrdb -merge /etc/X11/Xresources ;;
     6) sed -i -e 's/NumixSolarizedLightBlue/Solarized-Dark-Blue/g' -e t -e 's/Solarized-Dark-Blue/NumixSolarizedLightBlue/g' $HOME/.gtkrc-2.0 ;
        sed -i -e 's/NumixSolarizedLightBlue/Solarized-Dark-Blue/g' -e t -e 's/Solarized-Dark-Blue/NumixSolarizedLightBlue/g' $HOME/.config/gtk-3.0/settings.ini ;
-       # reloadGTK2 ;
        # reloadGTK3
        ;;
     7) networkmanager_dmenu ;;
