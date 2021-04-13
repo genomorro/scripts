@@ -15,4 +15,5 @@ WALLPAPER=$(ls $WALLPAPER_DIR | $DMENU -p "Choose a Wallpaper:")
 
 [[ -z "$WALLPAPER" ]] && exit 1
 
-display -backdrop -geometry $(xrandr  | grep \* | cut -d' ' -f4) -window root $WALLPAPER_DIR/$WALLPAPER
+#display -backdrop -geometry $(xrandr  | grep \* | cut -d' ' -f4) -window root $WALLPAPER_DIR/$WALLPAPER
+xwallpaper --daemon --zoom $WALLPAPER_DIR/$WALLPAPER

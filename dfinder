@@ -14,12 +14,14 @@ INPUT="$(echo -n | $DMENU -p "File search":)"
 
 [[ -z "$INPUT" ]] && exit 1
 
-RESULT="$(echo "$INPUT" | find $HOME /home/DATOS -iname "*$INPUT*" | $DMENU -p "Search for ($INPUT) result:")"
+RESULT="$(echo "$INPUT" | find $HOME -iname "*$INPUT*" | $DMENU -p "Search for ($INPUT) result:")"
 
 [[ -z "$RESULT" ]] && exit 1
 
-if [[ -f "$HOME/.dwm/linopenrc" ]]; then
-    exec open -c $HOME/.dwm/linopenrc "$RESULT"
-else
-    exec open "$RESULT"
-fi
+exec xdg-open "$RESULT"
+
+# if [[ -f "$HOME/.dwm/linopenrc" ]]; then
+#     exec open -c $HOME/.dwm/linopenrc "$RESULT"
+# else
+#     exec open "$RESULT"
+# fi

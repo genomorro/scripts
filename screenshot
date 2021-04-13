@@ -28,7 +28,7 @@ else
             f) FILE=${OPTARG} ;;
 	esac
     done
-    FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`.jpg
+    FILE_NAME=$HOME/Pictures/Screenshots/$FILE-`date +%Y%m%d-%H%M%S`.jpg
     case $MODE in
 	window)
 	    import $FILE_NAME ;;

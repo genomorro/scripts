@@ -49,7 +49,7 @@ else
             f) FILE=${OPTARG}   ;;
 	esac
     done
-    FILE_NAME=$HOME/Desktop/$FILE-`date +%Y%m%d-%H%M%S`
+    FILE_NAME=$HOME/Videos/Screencasts/$FILE-`date +%Y%m%d-%H%M%S`
     case $MODE in
 	0)
 	    ffmpeg -f pulse -ac 2 -i default -acodec flac $FILE_NAME.flac ;;
